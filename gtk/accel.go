@@ -10,7 +10,7 @@ import (
 	"unsafe"
 
 	"github.com/gotk3/gotk3/gdk"
-	"github.com/gotk3/gotk3/glib"
+	"github.com/go-gst/go-glib/glib"
 )
 
 // AccelFlags is a representation of GTK's GtkAccelFlags
@@ -126,7 +126,10 @@ func AccelGroupNew() (*AccelGroup, error) {
 
 // Connect is a wrapper around gtk_accel_group_connect().
 func (v *AccelGroup) Connect(key uint, mods gdk.ModifierType, flags AccelFlags, f interface{}) {
-	closure := glib.ClosureNew(f)
+	closure, err := glib.ClosureNew(f)
+	if err != nil {
+		panic(err)
+	}
 	cl := (*C.struct__GClosure)(unsafe.Pointer(closure))
 	C.gtk_accel_group_connect(
 		v.native(),
@@ -138,7 +141,10 @@ func (v *AccelGroup) Connect(key uint, mods gdk.ModifierType, flags AccelFlags, 
 
 // ConnectByPath is a wrapper around gtk_accel_group_connect_by_path().
 func (v *AccelGroup) ConnectByPath(path string, f interface{}) {
-	closure := glib.ClosureNew(f)
+	closure, err := glib.ClosureNew(f)
+	if err != nil {
+		panic(err)
+	}
 	cl := (*C.struct__GClosure)(unsafe.Pointer(closure))
 
 	cstr := C.CString(path)
@@ -152,7 +158,10 @@ func (v *AccelGroup) ConnectByPath(path string, f interface{}) {
 
 // Disconnect is a wrapper around gtk_accel_group_disconnect().
 func (v *AccelGroup) Disconnect(f interface{}) {
-	closure := glib.ClosureNew(f)
+	closure, err := glib.ClosureNew(f)
+	if err != nil {
+		panic(err)
+	}
 	cl := (*C.struct__GClosure)(unsafe.Pointer(closure))
 	C.gtk_accel_group_disconnect(v.native(), cl)
 }
@@ -179,7 +188,10 @@ func (v *AccelGroup) IsLocked() bool {
 
 // AccelGroupFromClosure is a wrapper around gtk_accel_group_from_accel_closure().
 func AccelGroupFromClosure(f interface{}) *AccelGroup {
-	closure := glib.ClosureNew(f)
+	closure, err := glib.ClosureNew(f)
+	if err != nil {
+		panic(err)
+	}
 	cl := (*C.struct__GClosure)(unsafe.Pointer(closure))
 	c := C.gtk_accel_group_from_accel_closure(cl)
 	if c == nil {

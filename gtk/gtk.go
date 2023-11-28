@@ -57,9 +57,9 @@ import (
 	"sync"
 	"unsafe"
 
+	"github.com/go-gst/go-glib/glib"
 	"github.com/gotk3/gotk3/cairo"
 	"github.com/gotk3/gotk3/gdk"
-	"github.com/gotk3/gotk3/glib"
 	"github.com/gotk3/gotk3/internal/callback"
 	"github.com/gotk3/gotk3/pango"
 )
@@ -230,6 +230,19 @@ func init() {
 		{glib.Type(C.gtk_tree_path_get_type()), marshalTreePath},
 	}
 	glib.RegisterGValueMarshalers(tm)
+}
+
+// Finalizer is a function that when called will finalize an object
+type Finalizer func()
+
+// FinalizerStrategy will be called by every runtime finalizer in gotk3
+// The simple version will just call the finalizer given as an argument
+// but in larger programs this might cause problems with the UI thread.
+// The FinalizerStrategy function will always be called in the goroutine that
+// `runtime.SetFinalizer` uses. It is a `var` to explicitly allow clients to
+// change the strategy to something more advanced.
+var FinalizerStrategy = func(f Finalizer) {
+	f()
 }
 
 /*
@@ -1675,17 +1688,16 @@ func (b *Builder) AddFromString(str string) error {
 // is an IObject, so it will need to be type-asserted to the appropriate type before
 // being used. For example, to get an object and type assert it as a window:
 //
-//   obj, err := builder.GetObject("window")
-//   if err != nil {
-//       // object not found
-//       return
-//   }
-//   if w, ok := obj.(*gtk.Window); ok {
-//       // do stuff with w here
-//   } else {
-//       // not a *gtk.Window
-//   }
-//
+//	obj, err := builder.GetObject("window")
+//	if err != nil {
+//	    // object not found
+//	    return
+//	}
+//	if w, ok := obj.(*gtk.Window); ok {
+//	    // do stuff with w here
+//	} else {
+//	    // not a *gtk.Window
+//	}
 func (b *Builder) GetObject(name string) (glib.IObject, error) {
 	cstr := C.CString(name)
 	defer C.free(unsafe.Pointer(cstr))
@@ -3190,7 +3202,7 @@ func (v *Clipboard) WaitForContents(target gdk.Atom) (*SelectionData, error) {
 		return nil, nilPtrErr
 	}
 	p := &SelectionData{c}
-	runtime.SetFinalizer(p, func(l *SelectionData) { glib.FinalizerStrategy(l.free) })
+	runtime.SetFinalizer(p, func(l *SelectionData) { FinalizerStrategy(l.free) })
 	return p, nil
 }
 
@@ -4190,7 +4202,7 @@ func (v *Entry) GetIconGIcon(iconPos EntryIconPosition) (*glib.Icon, error) {
 	}
 	obj := &glib.Object{glib.ToGObject(unsafe.Pointer(c))}
 	i := &glib.Icon{obj}
-	runtime.SetFinalizer(i, func(_ interface{}) { glib.FinalizerStrategy(obj.Unref) })
+	runtime.SetFinalizer(i, func(_ interface{}) { FinalizerStrategy(obj.Unref) })
 	return i, nil
 }
 
@@ -5871,7 +5883,7 @@ func (v *Image) GetGIcon() (*glib.Icon, IconSize, error) {
 	obj := &glib.Object{glib.ToGObject(unsafe.Pointer(gicon))}
 	i := &glib.Icon{obj}
 
-	runtime.SetFinalizer(i, func(_ interface{}) { glib.FinalizerStrategy(obj.Unref) })
+	runtime.SetFinalizer(i, func(_ interface{}) { FinalizerStrategy(obj.Unref) })
 	return i, IconSize(*size), nil
 }
 
@@ -6175,9 +6187,12 @@ func (v *ListStore) SetColumnTypes(types ...glib.Type) {
 // match, or Set() will return a non-nil error.
 //
 // As an example, a call to:
-//  store.Set(iter, []int{0, 1}, []interface{}{"Foo", "Bar"})
+//
+//	store.Set(iter, []int{0, 1}, []interface{}{"Foo", "Bar"})
+//
 // is functionally equivalent to calling the native C GTK function:
-//  gtk_list_store_set(store, iter, 0, "Foo", 1, "Bar", -1);
+//
+//	gtk_list_store_set(store, iter, 0, "Foo", 1, "Bar", -1);
 func (v *ListStore) Set(iter *TreeIter, columns []int, values []interface{}) error {
 	if len(columns) != len(values) {
 		return errors.New("columns and values lengths do not match")
@@ -8648,7 +8663,7 @@ func (v *SelectionData) GetPixbuf() *gdk.Pixbuf {
 
 	obj := &glib.Object{glib.ToGObject(unsafe.Pointer(c))}
 	p := &gdk.Pixbuf{obj}
-	runtime.SetFinalizer(p, func(_ interface{}) { glib.FinalizerStrategy(obj.Unref) })
+	runtime.SetFinalizer(p, func(_ interface{}) { FinalizerStrategy(obj.Unref) })
 
 	return p
 }
@@ -9280,7 +9295,7 @@ func TargetEntryNew(target string, flags TargetFlags, info uint) (*TargetEntry, 
 	}
 	t := (*TargetEntry)(unsafe.Pointer(c))
 	// causes setFinilizer error
-	//  runtime.SetFinalizer(t, func(v *TargetEntry) { glib.FinalizerStrategy(v.free) })
+	//  runtime.SetFinalizer(t, func(v *TargetEntry) { FinalizerStrategy(v.free) })
 	return t, nil
 }
 
@@ -10558,7 +10573,7 @@ func (v *TreeIter) Copy() (*TreeIter, error) {
 		return nil, nilPtrErr
 	}
 	t := &TreeIter{*c}
-	runtime.SetFinalizer(t, func(v *TreeIter) { glib.FinalizerStrategy(v.free) })
+	runtime.SetFinalizer(t, func(v *TreeIter) { FinalizerStrategy(v.free) })
 	return t, nil
 }
 
@@ -10678,7 +10693,7 @@ func (v *TreeModel) GetPath(iter *TreeIter) (*TreePath, error) {
 		return nil, nilPtrErr
 	}
 	p := &TreePath{c}
-	runtime.SetFinalizer(p, func(v *TreePath) { glib.FinalizerStrategy(v.free) })
+	runtime.SetFinalizer(p, func(v *TreePath) { FinalizerStrategy(v.free) })
 	return p, nil
 }
 
@@ -10831,7 +10846,7 @@ func (v *TreeModelFilter) ConvertChildPathToPath(childPath *TreePath) *TreePath 
 		return nil
 	}
 	p := &TreePath{path}
-	runtime.SetFinalizer(p, func(v *TreePath) { glib.FinalizerStrategy(v.free) })
+	runtime.SetFinalizer(p, func(v *TreePath) { FinalizerStrategy(v.free) })
 	return p
 }
 
@@ -10858,7 +10873,7 @@ func (v *TreeModelFilter) ConvertPathToChildPath(filterPath *TreePath) *TreePath
 		return nil
 	}
 	p := &TreePath{path}
-	runtime.SetFinalizer(p, func(v *TreePath) { glib.FinalizerStrategy(v.free) })
+	runtime.SetFinalizer(p, func(v *TreePath) { FinalizerStrategy(v.free) })
 	return p
 }
 
@@ -10955,7 +10970,7 @@ func TreePathNewFromString(path string) (*TreePath, error) {
 		return nil, nilPtrErr
 	}
 	t := &TreePath{c}
-	runtime.SetFinalizer(t, func(v *TreePath) { glib.FinalizerStrategy(v.free) })
+	runtime.SetFinalizer(t, func(v *TreePath) { FinalizerStrategy(v.free) })
 	return t, nil
 }
 
@@ -10981,7 +10996,7 @@ func TreePathNewFirst() (*TreePath, error) {
 		return nil, nilPtrErr
 	}
 	t := &TreePath{c}
-	runtime.SetFinalizer(t, func(v *TreePath) { glib.FinalizerStrategy(v.free) })
+	runtime.SetFinalizer(t, func(v *TreePath) { FinalizerStrategy(v.free) })
 	return t, nil
 }
 
@@ -11007,7 +11022,7 @@ func (v *TreePath) Copy() (*TreePath, error) {
 		return nil, nilPtrErr
 	}
 	t := &TreePath{c}
-	runtime.SetFinalizer(t, func(v *TreePath) { glib.FinalizerStrategy(v.free) })
+	runtime.SetFinalizer(t, func(v *TreePath) { FinalizerStrategy(v.free) })
 	return t, nil
 }
 
@@ -11093,7 +11108,7 @@ func (v *TreeSelection) GetSelectedRows(model ITreeModel) *glib.List {
 		return &TreePath{(*C.GtkTreePath)(ptr)}
 	})
 	runtime.SetFinalizer(glist, func(glist *glib.List) {
-		glib.FinalizerStrategy(func() {
+		FinalizerStrategy(func() {
 			glist.FreeFull(func(item interface{}) {
 				path := item.(*TreePath)
 				C.gtk_tree_path_free(path.GtkTreePath)
@@ -11207,7 +11222,7 @@ func TreeRowReferenceNew(model *TreeModel, path *TreePath) (*TreeRowReference, e
 		return nil, nilPtrErr
 	}
 	r := &TreeRowReference{c}
-	runtime.SetFinalizer(r, func(v *TreeRowReference) { glib.FinalizerStrategy(v.free) })
+	runtime.SetFinalizer(r, func(v *TreeRowReference) { FinalizerStrategy(v.free) })
 	return r, nil
 }
 
@@ -11218,7 +11233,7 @@ func (v *TreeRowReference) GetPath() *TreePath {
 		return nil
 	}
 	t := &TreePath{c}
-	runtime.SetFinalizer(t, func(v *TreePath) { glib.FinalizerStrategy(v.free) })
+	runtime.SetFinalizer(t, func(v *TreePath) { FinalizerStrategy(v.free) })
 	return t
 }
 
@@ -11398,7 +11413,7 @@ func (v *TreeModelSort) ConvertChildPathToPath(childPath *TreePath) *TreePath {
 		return nil
 	}
 	p := &TreePath{path}
-	runtime.SetFinalizer(p, func(v *TreePath) { glib.FinalizerStrategy(v.free) })
+	runtime.SetFinalizer(p, func(v *TreePath) { FinalizerStrategy(v.free) })
 	return p
 }
 
@@ -11417,7 +11432,7 @@ func (v *TreeModelSort) ConvertPathToChildPath(sortPath *TreePath) *TreePath {
 		return nil
 	}
 	p := &TreePath{path}
-	runtime.SetFinalizer(p, func(v *TreePath) { glib.FinalizerStrategy(v.free) })
+	runtime.SetFinalizer(p, func(v *TreePath) { FinalizerStrategy(v.free) })
 	return p
 }
 
@@ -11913,6 +11928,11 @@ var WrapMap = map[string]WrapFn{
 	"GtkVolumeButton":         wrapVolumeButton,
 	"GtkWidget":               wrapWidget,
 	"GtkWindow":               wrapWindow,
+	"GMenu":                   wrapMenuModel,
+}
+
+func wrapMenuModel(obj *glib.Object) *glib.MenuModel {
+	return &glib.MenuModel{obj}
 }
 
 // castInternal casts the given object to the appropriate Go struct, but returns it as interface for later type assertions.
@@ -11921,7 +11941,7 @@ var WrapMap = map[string]WrapFn{
 func castInternal(className string, obj *glib.Object) (interface{}, error) {
 	fn, ok := WrapMap[className]
 	if !ok {
-		fn, ok = glib.WrapMap[className]
+		fn, ok = WrapMap[className]
 		if !ok {
 			return nil, errors.New("unrecognized class name '" + className + "'")
 		}
@@ -11953,8 +11973,8 @@ func castInternal(className string, obj *glib.Object) (interface{}, error) {
 }
 
 // cast takes a native GObject and casts it to the appropriate Go struct.
-//TODO change all wrapFns to return an IObject
-//^- not sure about this TODO. This may make some usages of the wrapper functions quite verbose, no?
+// TODO change all wrapFns to return an IObject
+// ^- not sure about this TODO. This may make some usages of the wrapper functions quite verbose, no?
 func cast(c *C.GObject) (glib.IObject, error) {
 	ptr := unsafe.Pointer(c)
 	var (

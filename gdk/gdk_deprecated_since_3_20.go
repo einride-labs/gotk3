@@ -8,7 +8,7 @@ import (
 	"runtime"
 	"unsafe"
 
-	"github.com/gotk3/gotk3/glib"
+	"github.com/go-gst/go-glib/glib"
 )
 
 // Grab() is a wrapper around gdk_device_grab().
@@ -48,7 +48,7 @@ func (v *DeviceManager) ListDevices(tp DeviceType) *glib.List {
 		return &Device{&glib.Object{glib.ToGObject(ptr)}}
 	})
 	runtime.SetFinalizer(glist, func(glist *glib.List) {
-		glib.FinalizerStrategy(glist.Free)
+		FinalizerStrategy(glist.Free)
 	})
 	return glist
 }

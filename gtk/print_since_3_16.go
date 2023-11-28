@@ -10,8 +10,6 @@ import "C"
 import (
 	"runtime"
 	"unsafe"
-
-	"github.com/gotk3/gotk3/glib"
 )
 
 // PaperSizeNewFromIpp is a wrapper around gtk_paper_size_new_from_ipp().
@@ -25,7 +23,7 @@ func PaperSizeNewFromIPP(name string, width, height float64) (*PaperSize, error)
 	}
 
 	t := &PaperSize{c}
-	runtime.SetFinalizer(t, func(v *PaperSize) { glib.FinalizerStrategy(v.free) })
+	runtime.SetFinalizer(t, func(v *PaperSize) { FinalizerStrategy(v.free) })
 	return t, nil
 }
 

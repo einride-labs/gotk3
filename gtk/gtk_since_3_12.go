@@ -30,7 +30,7 @@ import (
 	"unsafe"
 
 	"github.com/gotk3/gotk3/gdk"
-	"github.com/gotk3/gotk3/glib"
+	"github.com/go-gst/go-glib/glib"
 )
 
 /*
@@ -569,6 +569,6 @@ func TreePathNewFromIndicesv(indices []int) (*TreePath, error) {
 		return nil, nilPtrErr
 	}
 	t := &TreePath{c}
-	runtime.SetFinalizer(t, func(l *TreePath) { glib.FinalizerStrategy(l.free) })
+	runtime.SetFinalizer(t, func(l *TreePath) { FinalizerStrategy(l.free) })
 	return t, nil
 }

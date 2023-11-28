@@ -14,7 +14,7 @@ import (
 	"strconv"
 	"unsafe"
 
-	"github.com/gotk3/gotk3/glib"
+	"github.com/go-gst/go-glib/glib"
 )
 
 func init() {
@@ -113,7 +113,7 @@ func PixbufNew(colorspace Colorspace, hasAlpha bool, bitsPerSample, width, heigh
 	obj := &glib.Object{glib.ToGObject(unsafe.Pointer(c))}
 	p := &Pixbuf{obj}
 	//obj.Ref()
-	runtime.SetFinalizer(p, func(_ interface{}) { glib.FinalizerStrategy(obj.Unref) })
+	runtime.SetFinalizer(p, func(_ interface{}) { FinalizerStrategy(obj.Unref) })
 	return p, nil
 }
 
@@ -134,7 +134,7 @@ func PixbufNewFromFile(filename string) (*Pixbuf, error) {
 	obj := &glib.Object{glib.ToGObject(unsafe.Pointer(c))}
 	p := &Pixbuf{obj}
 	//obj.Ref()
-	runtime.SetFinalizer(p, func(_ interface{}) { glib.FinalizerStrategy(obj.Unref) })
+	runtime.SetFinalizer(p, func(_ interface{}) { FinalizerStrategy(obj.Unref) })
 	return p, nil
 }
 
@@ -163,7 +163,7 @@ func PixbufNewFromData(pixbufData []byte, cs Colorspace, hasAlpha bool, bitsPerS
 	obj := &glib.Object{glib.ToGObject(unsafe.Pointer(c))}
 	p := &Pixbuf{obj}
 	//obj.Ref()
-	runtime.SetFinalizer(p, func(_ interface{}) { glib.FinalizerStrategy(obj.Unref) })
+	runtime.SetFinalizer(p, func(_ interface{}) { FinalizerStrategy(obj.Unref) })
 
 	return p, nil
 }
@@ -235,7 +235,7 @@ func PixbufCopy(v *Pixbuf) (*Pixbuf, error) {
 	obj := &glib.Object{glib.ToGObject(unsafe.Pointer(c))}
 	p := &Pixbuf{obj}
 	//obj.Ref()
-	runtime.SetFinalizer(p, func(_ interface{}) { glib.FinalizerStrategy(obj.Unref) })
+	runtime.SetFinalizer(p, func(_ interface{}) { FinalizerStrategy(obj.Unref) })
 	return p, nil
 }
 
@@ -279,7 +279,7 @@ func (v *Pixbuf) GetPixels() (channels []byte) {
 	// To make sure the slice doesn't outlive the Pixbuf, add a reference
 	v.Ref()
 	runtime.SetFinalizer(&channels, func(_ *[]byte) {
-		glib.FinalizerStrategy(v.Unref)
+		FinalizerStrategy(v.Unref)
 	})
 	return
 }
@@ -327,7 +327,7 @@ func (v *Pixbuf) ScaleSimple(destWidth, destHeight int, interpType InterpType) (
 	obj := &glib.Object{glib.ToGObject(unsafe.Pointer(c))}
 	p := &Pixbuf{obj}
 	//obj.Ref()
-	runtime.SetFinalizer(p, func(_ interface{}) { glib.FinalizerStrategy(obj.Unref) })
+	runtime.SetFinalizer(p, func(_ interface{}) { FinalizerStrategy(obj.Unref) })
 	return p, nil
 }
 
@@ -388,7 +388,7 @@ func (v *Pixbuf) AddAlpha(substituteColor bool, r, g, b uint8) *Pixbuf {
 
 	obj := &glib.Object{glib.ToGObject(unsafe.Pointer(c))}
 	p := &Pixbuf{obj}
-	runtime.SetFinalizer(p, func(_ interface{}) { glib.FinalizerStrategy(obj.Unref) })
+	runtime.SetFinalizer(p, func(_ interface{}) { FinalizerStrategy(obj.Unref) })
 
 	return p
 }
@@ -494,7 +494,7 @@ func (v *PixbufAnimation) GetStaticImage() *Pixbuf {
 	// Add a reference so the pixbuf doesn't outlive the parent pixbuf
 	// animation.
 	v.Ref()
-	runtime.SetFinalizer(p, func(*Pixbuf) { glib.FinalizerStrategy(v.Unref) })
+	runtime.SetFinalizer(p, func(*Pixbuf) { FinalizerStrategy(v.Unref) })
 
 	return p
 }
@@ -519,7 +519,7 @@ func PixbufAnimationNewFromFile(filename string) (*PixbufAnimation, error) {
 
 	obj := &glib.Object{glib.ToGObject(unsafe.Pointer(c))}
 	p := &PixbufAnimation{obj}
-	runtime.SetFinalizer(p, func(_ interface{}) { glib.FinalizerStrategy(obj.Unref) })
+	runtime.SetFinalizer(p, func(_ interface{}) { FinalizerStrategy(obj.Unref) })
 	return p, nil
 }
 
@@ -557,7 +557,7 @@ func PixbufLoaderNew() (*PixbufLoader, error) {
 	if c == nil {
 		return nil, nilPtrErr
 	}
-	return &PixbufLoader{glib.AssumeOwnership(unsafe.Pointer(c))}, nil
+	return &PixbufLoader{AssumeOwnership(unsafe.Pointer(c))}, nil
 }
 
 // PixbufLoaderNewWithType() is a wrapper around gdk_pixbuf_loader_new_with_type().
@@ -577,7 +577,7 @@ func PixbufLoaderNewWithType(t string) (*PixbufLoader, error) {
 		return nil, nilPtrErr
 	}
 
-	return &PixbufLoader{glib.AssumeOwnership(unsafe.Pointer(c))}, nil
+	return &PixbufLoader{AssumeOwnership(unsafe.Pointer(c))}, nil
 }
 
 // Write() is a wrapper around gdk_pixbuf_loader_write().  The
@@ -665,4 +665,19 @@ func (v *PixbufLoader) WriteAndReturnPixbufAnimation(data []byte) (*PixbufAnimat
 	}
 
 	return v.GetAnimation()
+}
+
+// AssumeOwnership is similar to Take, except the function does not take a
+// reference. This is usually used for newly constructed objects that for some
+// reason does not have an initial floating reference.
+//
+// To be clear, this should often be used when Gtk says "transfer full", as it
+// means the ownership is transferred to the caller, so we can assume that much.
+// This is in contrary to Take, which is used when Gtk says "transfer none", as
+// we're now referencing an object that might possibly be kept, so we should
+// mark as such.
+func AssumeOwnership(ptr unsafe.Pointer) *glib.Object {
+	obj := &glib.Object{GObject: glib.ToGObject(ptr)}
+	runtime.SetFinalizer(obj, func(v *glib.Object) { FinalizerStrategy(v.Unref) })
+	return obj
 }

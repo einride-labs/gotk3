@@ -26,7 +26,7 @@ import (
 	"time"
 
 	"github.com/gotk3/gotk3/gdk"
-	"github.com/gotk3/gotk3/glib"
+	"github.com/go-gst/go-glib/glib"
 )
 
 func init() {

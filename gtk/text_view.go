@@ -10,7 +10,7 @@ import (
 	"unsafe"
 
 	"github.com/gotk3/gotk3/gdk"
-	"github.com/gotk3/gotk3/glib"
+	"github.com/go-gst/go-glib/glib"
 	"github.com/gotk3/gotk3/pango"
 )
 
@@ -246,7 +246,7 @@ func (v *TextView) GetTabs() (*pango.TabArray, error) {
 		return nil, nilPtrErr
 	}
 	ta := pango.WrapTabArray(uintptr(unsafe.Pointer(c)))
-	runtime.SetFinalizer(ta, func(v *pango.TabArray) { glib.FinalizerStrategy(v.Free) })
+	runtime.SetFinalizer(ta, func(v *pango.TabArray) { FinalizerStrategy(v.Free) })
 	return ta, nil
 }
 

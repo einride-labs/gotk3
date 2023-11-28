@@ -8,7 +8,7 @@ import "C"
 import (
 	"unsafe"
 
-	"github.com/gotk3/gotk3/glib"
+	"github.com/go-gst/go-glib/glib"
 	"github.com/gotk3/gotk3/internal/callback"
 )
 

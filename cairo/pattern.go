@@ -8,8 +8,6 @@ import "C"
 import (
 	"runtime"
 	"unsafe"
-
-	"github.com/gotk3/gotk3/glib"
 )
 
 //--------------------------------------------[ cairo_pattern_t  ==  Pattern ]--
@@ -73,7 +71,7 @@ func newPatternFromNative(patternNative *C.cairo_pattern_t) (*Pattern, error) {
 	if e != nil {
 		return nil, e
 	}
-	runtime.SetFinalizer(ptr, func(v *Pattern) { glib.FinalizerStrategy(v.destroy) })
+	runtime.SetFinalizer(ptr, func(v *Pattern) { FinalizerStrategy(v.destroy) })
 	return ptr, nil
 }
 

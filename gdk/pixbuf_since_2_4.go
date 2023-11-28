@@ -20,7 +20,7 @@ import (
 	"strconv"
 	"unsafe"
 
-	"github.com/gotk3/gotk3/glib"
+	"github.com/go-gst/go-glib/glib"
 	"github.com/gotk3/gotk3/internal/callback"
 )
 
@@ -125,7 +125,7 @@ func PixbufNewFromFileAtSize(filename string, width, height int) (*Pixbuf, error
 	obj := &glib.Object{glib.ToGObject(unsafe.Pointer(c))}
 	p := &Pixbuf{obj}
 	//obj.Ref()
-	runtime.SetFinalizer(p, func(_ interface{}) { glib.FinalizerStrategy(obj.Unref) })
+	runtime.SetFinalizer(p, func(_ interface{}) { FinalizerStrategy(obj.Unref) })
 	return p, nil
 }
 

@@ -13,7 +13,7 @@ import (
 
 	"github.com/gotk3/gotk3/cairo"
 	"github.com/gotk3/gotk3/gdk"
-	"github.com/gotk3/gotk3/glib"
+	"github.com/go-gst/go-glib/glib"
 )
 
 /*
@@ -914,7 +914,7 @@ func requisitionFromNative(requisitionNative *C.GtkRequisition) (*Requisition, e
 	if requisition == nil {
 		return nil, nilPtrErr
 	}
-	runtime.SetFinalizer(requisition, func(l *Requisition) { glib.FinalizerStrategy(l.free) })
+	runtime.SetFinalizer(requisition, func(l *Requisition) { FinalizerStrategy(l.free) })
 	return requisition, nil
 }
 

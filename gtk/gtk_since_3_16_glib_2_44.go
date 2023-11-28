@@ -12,7 +12,7 @@ import (
 	"unsafe"
 
 	"github.com/gotk3/gotk3/internal/callback"
-	"github.com/gotk3/gotk3/glib"
+	"github.com/go-gst/go-glib/glib"
 )
 
 // BindModel is a wrapper around gtk_list_box_bind_model().

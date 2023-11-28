@@ -8,7 +8,7 @@ import (
 	"runtime"
 	"unsafe"
 
-	"github.com/gotk3/gotk3/glib"
+	"github.com/go-gst/go-glib/glib"
 )
 
 func init() {
@@ -87,7 +87,7 @@ func CreateFontOptions() *FontOptions {
 	native := C.cairo_font_options_create()
 
 	opts := &FontOptions{native}
-	runtime.SetFinalizer(opts, func(v *FontOptions) { glib.FinalizerStrategy(v.destroy) })
+	runtime.SetFinalizer(opts, func(v *FontOptions) { FinalizerStrategy(v.destroy) })
 
 	return opts
 }
@@ -101,7 +101,7 @@ func (o *FontOptions) Copy() *FontOptions {
 	native := C.cairo_font_options_copy(o.native)
 
 	opts := &FontOptions{native}
-	runtime.SetFinalizer(opts, func(v *FontOptions) { glib.FinalizerStrategy(v.destroy) })
+	runtime.SetFinalizer(opts, func(v *FontOptions) { FinalizerStrategy(v.destroy) })
 
 	return opts
 }

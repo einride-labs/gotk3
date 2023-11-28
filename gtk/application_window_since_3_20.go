@@ -10,7 +10,7 @@ import "C"
 import (
 	"unsafe"
 
-	"github.com/gotk3/gotk3/glib"
+	"github.com/go-gst/go-glib/glib"
 )
 
 // SetHelpOverlay is a wrapper around gtk_application_window_set_help_overlay().
