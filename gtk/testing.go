@@ -10,7 +10,7 @@ import (
 
 	"github.com/gotk3/gotk3/gdk"
 
-	"github.com/gotk3/gotk3/glib"
+	"github.com/go-gst/go-glib/glib"
 )
 
 // TestFindLabel is a wrapper around gtk_test_find_label().

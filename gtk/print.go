@@ -10,7 +10,7 @@ import (
 	"unsafe"
 
 	"github.com/gotk3/gotk3/cairo"
-	"github.com/gotk3/gotk3/glib"
+	"github.com/go-gst/go-glib/glib"
 	"github.com/gotk3/gotk3/internal/callback"
 	"github.com/gotk3/gotk3/pango"
 )
@@ -291,7 +291,7 @@ func (ps *PageSetup) SetOrientation(orientation PageOrientation) {
 func (ps *PageSetup) GetPaperSize() *PaperSize {
 	c := C.gtk_page_setup_get_paper_size(ps.native())
 	p := &PaperSize{c}
-	runtime.SetFinalizer(p, func(v *PaperSize) { glib.FinalizerStrategy(v.free) })
+	runtime.SetFinalizer(p, func(v *PaperSize) { FinalizerStrategy(v.free) })
 	return p
 }
 
@@ -471,7 +471,7 @@ func PaperSizeNew(name string) (*PaperSize, error) {
 	}
 
 	t := &PaperSize{c}
-	runtime.SetFinalizer(t, func(v *PaperSize) { glib.FinalizerStrategy(v.free) })
+	runtime.SetFinalizer(t, func(v *PaperSize) { FinalizerStrategy(v.free) })
 	return t, nil
 }
 
@@ -487,7 +487,7 @@ func PaperSizeNewFromPPD(name, displayName string, width, height float64) (*Pape
 		return nil, nilPtrErr
 	}
 	t := &PaperSize{c}
-	runtime.SetFinalizer(t, func(v *PaperSize) { glib.FinalizerStrategy(v.free) })
+	runtime.SetFinalizer(t, func(v *PaperSize) { FinalizerStrategy(v.free) })
 	return t, nil
 }
 
@@ -503,7 +503,7 @@ func PaperSizeNewCustom(name, displayName string, width, height float64, unit Un
 		return nil, nilPtrErr
 	}
 	t := &PaperSize{c}
-	runtime.SetFinalizer(t, func(v *PaperSize) { glib.FinalizerStrategy(v.free) })
+	runtime.SetFinalizer(t, func(v *PaperSize) { FinalizerStrategy(v.free) })
 	return t, nil
 }
 
@@ -514,7 +514,7 @@ func (ps *PaperSize) Copy() (*PaperSize, error) {
 		return nil, nilPtrErr
 	}
 	t := &PaperSize{c}
-	runtime.SetFinalizer(t, func(v *PaperSize) { glib.FinalizerStrategy(v.free) })
+	runtime.SetFinalizer(t, func(v *PaperSize) { FinalizerStrategy(v.free) })
 	return t, nil
 }
 
@@ -542,7 +542,7 @@ func PaperSizeGetPaperSizes(includeCustom bool) *glib.List {
 	})
 
 	runtime.SetFinalizer(glist, func(glist *glib.List) {
-		glib.FinalizerStrategy(func() {
+		FinalizerStrategy(func() {
 			glist.FreeFull(func(item interface{}) {
 				ps := item.(*PaperSize)
 				C.gtk_paper_size_free(ps.GtkPaperSize)
@@ -1296,7 +1296,7 @@ func (ps *PrintSettings) GetPaperSize() (*PaperSize, error) {
 		return nil, nilPtrErr
 	}
 	p := &PaperSize{c}
-	runtime.SetFinalizer(p, func(v *PaperSize) { glib.FinalizerStrategy(v.free) })
+	runtime.SetFinalizer(p, func(v *PaperSize) { FinalizerStrategy(v.free) })
 	return p, nil
 }
 

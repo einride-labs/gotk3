@@ -9,7 +9,7 @@ import "C"
 import (
 	"unsafe"
 
-	"github.com/gotk3/gotk3/glib"
+	"github.com/go-gst/go-glib/glib"
 )
 
 // MoveToCurrentDesktop is a wrapper around gdk_x11_window_move_to_current_desktop().

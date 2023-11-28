@@ -10,7 +10,7 @@ import (
 	"runtime"
 	"unsafe"
 
-	"github.com/gotk3/gotk3/glib"
+	"github.com/go-gst/go-glib/glib"
 )
 
 func init() {
@@ -112,7 +112,7 @@ func newRegionFromNative(regionNative *C.cairo_region_t) (*Region, error) {
 	if e != nil {
 		return nil, e
 	}
-	runtime.SetFinalizer(ptr, func(v *Region) { glib.FinalizerStrategy(v.destroy) })
+	runtime.SetFinalizer(ptr, func(v *Region) { FinalizerStrategy(v.destroy) })
 	return ptr, nil
 }
 

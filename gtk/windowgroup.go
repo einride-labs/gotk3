@@ -10,7 +10,7 @@ import (
 	"unsafe"
 
 	"github.com/gotk3/gotk3/gdk"
-	"github.com/gotk3/gotk3/glib"
+	"github.com/go-gst/go-glib/glib"
 )
 
 /*
@@ -83,7 +83,7 @@ func (v *WindowGroup) ListWindows() *glib.List {
 	glist.DataWrapper(func(ptr unsafe.Pointer) interface{} {
 		return wrapWindow(glib.Take(ptr))
 	})
-	runtime.SetFinalizer(glist, func(l *glib.List) { glib.FinalizerStrategy(l.Free) })
+	runtime.SetFinalizer(glist, func(l *glib.List) { FinalizerStrategy(l.Free) })
 	return glist
 }
 

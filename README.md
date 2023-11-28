@@ -94,7 +94,7 @@ import (
     "log"
     "os"
 
-    "github.com/gotk3/gotk3/glib"
+    "github.com/go-gst/go-glib/glib"
     "github.com/gotk3/gotk3/gtk"
 )
 
@@ -142,7 +142,7 @@ import (
     "log"
     "os"
 
-    "github.com/gotk3/gotk3/glib"
+    "github.com/go-gst/go-glib/glib"
     "github.com/gotk3/gotk3/gtk"
 )
 
@@ -186,7 +186,7 @@ func main() {
 Each package's internal `go doc` style documentation can be viewed
 online without installing this package by using the GoDoc site (links
 to [cairo](http://godoc.org/github.com/gotk3/gotk3/cairo),
-[glib](http://godoc.org/github.com/gotk3/gotk3/glib),
+[glib](http://godoc.org/github.com/go-gst/go-glib/glib),
 [gdk](http://godoc.org/github.com/gotk3/gotk3/gdk), and
 [gtk](http://godoc.org/github.com/gotk3/gotk3/gtk) documentation).
 

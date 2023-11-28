@@ -10,7 +10,7 @@ import (
 	"runtime"
 	"unsafe"
 
-	"github.com/gotk3/gotk3/glib"
+	"github.com/go-gst/go-glib/glib"
 )
 
 // ApplicationInhibitFlags is a representation of GTK's GtkApplicationInhibitFlags.
@@ -165,6 +165,6 @@ func (v *Application) GetWindows() *glib.List {
 	glist.DataWrapper(func(ptr unsafe.Pointer) interface{} {
 		return wrapWindow(glib.Take(ptr))
 	})
-	runtime.SetFinalizer(glist, func(v *glib.List) { glib.FinalizerStrategy(v.Free) })
+	runtime.SetFinalizer(glist, func(v *glib.List) { FinalizerStrategy(v.Free) })
 	return glist
 }

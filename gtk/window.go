@@ -11,7 +11,7 @@ import (
 	"unsafe"
 
 	"github.com/gotk3/gotk3/gdk"
-	"github.com/gotk3/gotk3/glib"
+	"github.com/go-gst/go-glib/glib"
 )
 
 /*
@@ -653,7 +653,7 @@ func WindowListToplevels() *glib.List {
 	glist.DataWrapper(func(ptr unsafe.Pointer) interface{} {
 		return wrapWindow(glib.Take(ptr))
 	})
-	runtime.SetFinalizer(glist, func(v *glib.List) { glib.FinalizerStrategy(v.Free) })
+	runtime.SetFinalizer(glist, func(v *glib.List) { FinalizerStrategy(v.Free) })
 	return glist
 }
 
@@ -668,7 +668,7 @@ func WindowGetDefaultIconList() *glib.List {
 	glist.DataWrapper(func(ptr unsafe.Pointer) interface{} {
 		return &gdk.Pixbuf{glib.Take(ptr)}
 	})
-	runtime.SetFinalizer(glist, func(v *glib.List) { glib.FinalizerStrategy(v.Free) })
+	runtime.SetFinalizer(glist, func(v *glib.List) { FinalizerStrategy(v.Free) })
 	return glist
 }
 
@@ -683,7 +683,7 @@ func (v *Window) GetIconList() *glib.List {
 	glist.DataWrapper(func(ptr unsafe.Pointer) interface{} {
 		return &gdk.Pixbuf{glib.Take(ptr)}
 	})
-	runtime.SetFinalizer(glist, func(v *glib.List) { glib.FinalizerStrategy(v.Free) })
+	runtime.SetFinalizer(glist, func(v *glib.List) { FinalizerStrategy(v.Free) })
 	return glist
 }
 

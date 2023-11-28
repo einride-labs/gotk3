@@ -12,7 +12,7 @@ import (
 	"unsafe"
 
 	"github.com/gotk3/gotk3/gdk"
-	"github.com/gotk3/gotk3/glib"
+	"github.com/go-gst/go-glib/glib"
 	"github.com/gotk3/gotk3/internal/callback"
 )
 
@@ -121,7 +121,7 @@ func (v *TreeView) GetPathAtPos(x, y int) (*TreePath, *TreeViewColumn, int, int,
 
 	if cpath != nil {
 		path = &TreePath{cpath}
-		runtime.SetFinalizer(path, func(v *TreePath) { glib.FinalizerStrategy(v.free) })
+		runtime.SetFinalizer(path, func(v *TreePath) { FinalizerStrategy(v.free) })
 	}
 	if ccol != nil {
 		column = wrapTreeViewColumn(glib.Take(unsafe.Pointer(ccol)))
@@ -237,7 +237,7 @@ func (v *TreeView) GetColumns() *glib.List {
 	list.DataWrapper(func(ptr unsafe.Pointer) interface{} {
 		return wrapTreeViewColumn(glib.Take(unsafe.Pointer(ptr)))
 	})
-	runtime.SetFinalizer(list, func(glist *glib.List) { glib.FinalizerStrategy(glist.Free) })
+	runtime.SetFinalizer(list, func(glist *glib.List) { FinalizerStrategy(glist.Free) })
 
 	return list
 }
@@ -285,7 +285,7 @@ func (v *TreeView) GetCursor() (p *TreePath, c *TreeViewColumn) {
 
 	if path != nil {
 		p = &TreePath{path}
-		runtime.SetFinalizer(p, func(v *TreePath) { glib.FinalizerStrategy(v.free) })
+		runtime.SetFinalizer(p, func(v *TreePath) { FinalizerStrategy(v.free) })
 	}
 
 	if col != nil {
@@ -528,7 +528,7 @@ func (v *TreeView) IsBlankAtPos(x, y int) (*TreePath, *TreeViewColumn, int, int,
 
 	if cpath != nil {
 		path = &TreePath{cpath}
-		runtime.SetFinalizer(path, func(v *TreePath) { glib.FinalizerStrategy(v.free) })
+		runtime.SetFinalizer(path, func(v *TreePath) { FinalizerStrategy(v.free) })
 	}
 	if ccol != nil {
 		column = wrapTreeViewColumn(glib.Take(unsafe.Pointer(ccol)))
@@ -628,7 +628,7 @@ func (v *TreeView) GetDragDestRow() (path *TreePath, pos TreeViewDropPosition) {
 
 	if cpath != nil {
 		path = &TreePath{cpath}
-		runtime.SetFinalizer(path, func(v *TreePath) { glib.FinalizerStrategy(v.free) })
+		runtime.SetFinalizer(path, func(v *TreePath) { FinalizerStrategy(v.free) })
 	}
 
 	return
@@ -648,7 +648,7 @@ func (v *TreeView) GetDestRowAtPos(dragX, dragY int) (path *TreePath, pos TreeVi
 
 	if cpath != nil {
 		path = &TreePath{cpath}
-		runtime.SetFinalizer(path, func(v *TreePath) { glib.FinalizerStrategy(v.free) })
+		runtime.SetFinalizer(path, func(v *TreePath) { FinalizerStrategy(v.free) })
 	}
 
 	return
