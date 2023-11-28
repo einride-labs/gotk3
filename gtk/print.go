@@ -9,10 +9,10 @@ import (
 	"runtime"
 	"unsafe"
 
-	"github.com/gotk3/gotk3/cairo"
+	"github.com/einride-labs/gotk3/cairo"
 	"github.com/go-gst/go-glib/glib"
-	"github.com/gotk3/gotk3/internal/callback"
-	"github.com/gotk3/gotk3/pango"
+	"github.com/einride-labs/gotk3/internal/callback"
+	"github.com/einride-labs/gotk3/pango"
 )
 
 func init() {

@@ -9,7 +9,7 @@ import "C"
 import (
 	"unsafe"
 
-	"github.com/gotk3/gotk3/pango"
+	"github.com/einride-labs/gotk3/pango"
 
 	"github.com/go-gst/go-glib/glib"
 )

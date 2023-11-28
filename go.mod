@@ -1,4 +1,4 @@
-module github.com/gotk3/gotk3
+module github.com/einride-labs/gotk3
 
 go 1.21
 

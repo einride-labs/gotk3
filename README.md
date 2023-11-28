@@ -1,4 +1,4 @@
-gotk3 [![GoDoc](https://godoc.org/github.com/gotk3/gotk3?status.svg)](https://godoc.org/github.com/gotk3/gotk3)
+gotk3 [![GoDoc](https://godoc.org/github.com/einride-labs/gotk3?status.svg)](https://godoc.org/github.com/einride-labs/gotk3)
 =====
 
 [![Build Status](https://travis-ci.org/gotk3/gotk3.svg?branch=master)](https://travis-ci.org/gotk3/gotk3)
@@ -18,7 +18,7 @@ garbage collector without the need to use or understand GObject's
 floating references.
 
 for better understanding see
-[package reference documation](https://pkg.go.dev/github.com/gotk3/gotk3/gtk?tab=doc)
+[package reference documation](https://pkg.go.dev/github.com/einride-labs/gotk3/gtk?tab=doc)
 
 On Linux, see which version your distribution has [here](https://pkgs.org) with the search terms:
 * libgtk-3
@@ -27,13 +27,13 @@ On Linux, see which version your distribution has [here](https://pkgs.org) with 
 
 ## Sample Use
 
-The following example can be found in [Examples](https://github.com/gotk3/gotk3-examples/).
+The following example can be found in [Examples](https://github.com/einride-labs/gotk3-examples/).
 
 ```Go
 package main
 
 import (
-    "github.com/gotk3/gotk3/gtk"
+    "github.com/einride-labs/gotk3/gtk"
     "log"
 )
 
@@ -95,7 +95,7 @@ import (
     "os"
 
     "github.com/go-gst/go-glib/glib"
-    "github.com/gotk3/gotk3/gtk"
+    "github.com/einride-labs/gotk3/gtk"
 )
 
 // Simple Gtk3 Application written in go.
@@ -143,7 +143,7 @@ import (
     "os"
 
     "github.com/go-gst/go-glib/glib"
-    "github.com/gotk3/gotk3/gtk"
+    "github.com/einride-labs/gotk3/gtk"
 )
 
 // Simple Gtk3 Application written in go.
@@ -185,22 +185,22 @@ func main() {
 
 Each package's internal `go doc` style documentation can be viewed
 online without installing this package by using the GoDoc site (links
-to [cairo](http://godoc.org/github.com/gotk3/gotk3/cairo),
+to [cairo](http://godoc.org/github.com/einride-labs/gotk3/cairo),
 [glib](http://godoc.org/github.com/go-gst/go-glib/glib),
-[gdk](http://godoc.org/github.com/gotk3/gotk3/gdk), and
-[gtk](http://godoc.org/github.com/gotk3/gotk3/gtk) documentation).
+[gdk](http://godoc.org/github.com/einride-labs/gotk3/gdk), and
+[gtk](http://godoc.org/github.com/einride-labs/gotk3/gtk) documentation).
 
 You can also view the documentation locally once the package is
 installed with the `godoc` tool by running `godoc -http=":6060"` and
 pointing your browser to
-http://localhost:6060/pkg/github.com/gotk3/gotk3
+http://localhost:6060/pkg/github.com/einride-labs/gotk3
 
 ## Installation
 
 gotk3 currently requires GTK 3.6-3.24, GLib 2.36-2.46, and
 Cairo 1.10 or 1.12.  A recent Go (1.8 or newer) is also required.
 
-For detailed instructions see the wiki pages: [installation](https://github.com/gotk3/gotk3/wiki#installation)
+For detailed instructions see the wiki pages: [installation](https://github.com/einride-labs/gotk3/wiki#installation)
 
 ## Using deprecated features
 
@@ -220,7 +220,7 @@ The same goes for
 
 - Add bindings for all of GTK functions
 - Add tests for each implemented binding
-- See the next steps: [wiki page](https://github.com/gotk3/gotk3/wiki/The-future-and-what-happens-next) and add [your suggestion](https://github.com/gotk3/gotk3/issues/576)
+- See the next steps: [wiki page](https://github.com/einride-labs/gotk3/wiki/The-future-and-what-happens-next) and add [your suggestion](https://github.com/einride-labs/gotk3/issues/576)
 
 
 ## License

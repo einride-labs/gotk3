@@ -9,8 +9,8 @@ import "C"
 import (
 	"unsafe"
 
-	"github.com/gotk3/gotk3/cairo"
-	"github.com/gotk3/gotk3/gdk"
+	"github.com/einride-labs/gotk3/cairo"
+	"github.com/einride-labs/gotk3/gdk"
 	"github.com/go-gst/go-glib/glib"
 )
 

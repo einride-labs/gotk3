@@ -8,8 +8,8 @@ package gtk_test
 import (
 	"testing"
 
-	"github.com/gotk3/gotk3/gdk"
-	"github.com/gotk3/gotk3/gtk"
+	"github.com/einride-labs/gotk3/gdk"
+	"github.com/einride-labs/gotk3/gtk"
 )
 
 func TestWindowNew(t *testing.T) {

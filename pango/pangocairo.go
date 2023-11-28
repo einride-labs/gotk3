@@ -27,7 +27,7 @@ import (
 	//	"github.com/go-gst/go-glib/glib"
 	"unsafe"
 
-	"github.com/gotk3/gotk3/cairo"
+	"github.com/einride-labs/gotk3/cairo"
 )
 
 func init() {

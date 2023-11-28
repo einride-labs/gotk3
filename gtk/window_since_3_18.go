@@ -10,7 +10,7 @@ import "C"
 import (
 	"unsafe"
 
-	"github.com/gotk3/gotk3/gdk"
+	"github.com/einride-labs/gotk3/gdk"
 )
 
 // FullscreenOnMonitor is a wrapper around gtk_window_fullscreen_on_monitor().
